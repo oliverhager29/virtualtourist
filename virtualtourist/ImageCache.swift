@@ -64,10 +64,19 @@ class ImageCache {
     }
     
     // MARK: - Helper
+    func convertUrlToFileName(url: String) -> String {
+        var str = url.stringByReplacingOccurrencesOfString("https://", withString: "")
+        str = str.stringByReplacingOccurrencesOfString("/", withString: "_")
+        str = str.stringByReplacingOccurrencesOfString(".jpg", withString: "@jpg")
+        str = str.stringByReplacingOccurrencesOfString(".", withString: "_")
+        str = str.stringByReplacingOccurrencesOfString(" ", withString: "_")
+        str = str.stringByReplacingOccurrencesOfString("@jpg", withString: ".jpg")
+        return str
+    }
     
     func pathForIdentifier(identifier: String) -> String {
         let documentsDirectoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first
-        let fullURL = documentsDirectoryURL!.URLByAppendingPathComponent(identifier)
+        let fullURL = documentsDirectoryURL!.URLByAppendingPathComponent(convertUrlToFileName(identifier))
         
         return fullURL.path!
     }

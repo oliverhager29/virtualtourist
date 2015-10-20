@@ -42,6 +42,14 @@ class LocationRepository {
                         print(error)
                     }
                 }
+                for photo in result {
+                    FlickrClient.sharedInstance().getImageByUrl(photo.url) {
+                        results, error in
+                        if let error = error {
+                            print(error)
+                        }
+                    }
+                }
             }
         }
     }

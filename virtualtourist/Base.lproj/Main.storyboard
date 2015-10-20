@@ -292,7 +292,7 @@
                                     <constraint firstAttribute="height" constant="174" id="T8T-I6-fLN"/>
                                 </constraints>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1p-IT-BbB">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1p-IT-BbB">
                                 <rect key="frame" x="10" y="14" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="UBO-sI-dYn"/>
@@ -351,7 +351,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="New Collection"/>
                                 <connections>
-                                    <action selector="okButtonPressed:" destination="0Yu-Fk-EHl" eventType="touchUpInside" id="BSE-t2-bbw"/>
+                                    <action selector="newCollectionButtonPressed:" destination="0Yu-Fk-EHl" eventType="touchUpInside" id="3Wd-aP-DDs"/>
                                 </connections>
                             </button>
                         </subviews>

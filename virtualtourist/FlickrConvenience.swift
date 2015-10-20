@@ -17,7 +17,7 @@ extension FlickrClient {
     
     /// get photo by URL
     /// :param: url URL for retrieving Flickr image
-    func getPhotoByUrl(url: String, completionHandler: (result: UIImage?, error: NSError?) -> Void) {
+    func getImageByUrl(url: String, completionHandler: (result: UIImage?, error: NSError?) -> Void) {
         FlickrClient.sharedInstance().taskForGETImage(url) {
             imageData, error in
             if let error = error {

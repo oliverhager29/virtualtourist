@@ -30,7 +30,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     var mapLocation: MapLocation!
     var pin: Pin!
-    var images : [UIImage] = []
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -42,6 +41,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     @IBAction func newCollectionButtonPressed(sender: UIButton) {
         reloadPhotos()
     }
+    
     /// initialize the alerts and their handlers
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -53,7 +53,51 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         mapView.delegate = self
         myCollectionView.delegate = self
         addAnnotation(mapLocation)
-        reloadPhotos()
+    }
+    
+    func loadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, noImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
+        FlickrClient.sharedInstance().getPhotosByLocation(pin.latitude, longitude: pin.longitude) {
+            result, error in
+            if let error = error {
+                print(error)
+                dispatch_async(dispatch_get_main_queue(), {
+                    viewController.presentViewController(errorRetrievingImagesAlert, animated: true, completion: nil)
+                })
+            }
+            else {
+                if result!.isEmpty {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        viewController.presentViewController(noImagesAlert, animated: true, completion: nil)
+                    })
+                }
+                else {
+                    pin.photos.addObjectsFromArray(result!)
+                    CoreDataStackManager.sharedInstance().saveContext()
+                    for obj in pin.photos {
+                        let photo = obj as! Photo
+                        FlickrClient.sharedInstance().getImageByUrl(photo.url) {
+                            result, error in
+                            if let error = error {
+                                print(error)
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    viewController.presentViewController(errorRetrievingImagesAlert, animated: true, completion: nil)
+                                })
+                            }
+                            else if result != nil {
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    if collectionView != nil {
+                                        collectionView.reloadData()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                dispatch_async(dispatch_get_main_queue()) {
+                    newCollectionButton.enabled = true
+                }
+            }
+        }
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
@@ -70,53 +114,10 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         newCollectionButton.enabled = false
         pin.photos.removeAllObjects()
         CoreDataStackManager.sharedInstance().saveContext()
-        images.removeAll()
-        FlickrClient.sharedInstance().getPhotosByLocation(pin.latitude, longitude: pin.longitude) {
-            result, error in
-            if let error = error {
-                print(error)
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(self.errorRetrievingImagesAlert, animated: true, completion: nil)
-                })
-            }
-            else {
-                if result!.isEmpty {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.presentViewController(self.noImagesAlert, animated: true, completion: nil)
-                    })
-                }
-                else {
-                    self.pin.photos.addObjectsFromArray(result!)
-                    CoreDataStackManager.sharedInstance().saveContext()
-                    for obj in self.pin.photos {
-                        let photo = obj as! Photo
-                        FlickrClient.sharedInstance().getPhotoByUrl(photo.url) {
-                            result, error in
-                            if let error = error {
-                                print(error)
-                                dispatch_async(dispatch_get_main_queue(), {
-                                    self.presentViewController(self.errorRetrievingImagesAlert, animated: true, completion: nil)
-                                })
-
-                            }
-                            else if let result = result as UIImage? {
-                                self.images.append(result)
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    if self.myCollectionView != nil {
-                                        self.myCollectionView.reloadData()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.newCollectionButton.enabled = true
-                }
-            }
-        }
+        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, noImagesAlert: noImagesAlert, newCollectionButton: newCollectionButton)
+        myCollectionView.reloadData()
     }
-    
+        
     /// add annotations to map
     /// - parameter mapview: map view
     /// :patam: locations for which annotations are created
@@ -187,7 +188,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// :param: section (here only one section exists)
     /// :returns: number of Memes
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return pin.photos.count
     }
     
     /// fill cell with content (Memed image)
@@ -200,8 +201,9 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as! DeletePhotoCollectionViewCell
         
         /* Set cell defaults */
-        if indexPath.row < images.count {
-            cell.imageView.image = images[indexPath.row]
+        if indexPath.row < pin.photos.count {
+            let photo = pin.photos[indexPath.row] as! Photo
+            cell.imageView.image = FlickrClient.Caches.imageCache.imageWithIdentifier(photo.url)
         }
         return cell
     }
@@ -210,7 +212,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// :param: collectionView collection view
     /// :param: indexPath index path (row) of selected cell
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        images.removeAtIndex(indexPath.row)
         self.pin.photos.removeObjectAtIndex(indexPath.row)
         CoreDataStackManager.sharedInstance().saveContext()
         myCollectionView.reloadData()
