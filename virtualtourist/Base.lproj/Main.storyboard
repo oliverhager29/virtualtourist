@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="sXC-24-PIS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="sXC-24-PIS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -147,7 +147,7 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="EUs-kv-6Kl">
                                 <rect key="frame" x="0.0" y="66" width="600" height="534"/>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YfU-nd-Q1c">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YfU-nd-Q1c">
                                 <rect key="frame" x="554" y="28" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="46" id="Fzx-Te-KQa"/>
@@ -286,27 +286,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="bhi-BK-N4X">
-                                <rect key="frame" x="0.0" y="64" width="600" height="174"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="bhi-BK-N4X">
+                                <rect key="frame" x="0.0" y="44" width="600" height="289"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="174" id="T8T-I6-fLN"/>
+                                    <constraint firstAttribute="height" constant="298" id="WPC-LZ-4ub"/>
                                 </constraints>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1p-IT-BbB">
-                                <rect key="frame" x="10" y="14" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="UBO-sI-dYn"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="＜Ok"/>
-                                <connections>
-                                    <action selector="okButtonPressed:" destination="0Yu-Fk-EHl" eventType="touchUpInside" id="qlW-LA-pt9"/>
-                                </connections>
-                            </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Eap-eD-c5W">
-                                <rect key="frame" x="-2" y="237" width="600" height="314"/>
+                                <rect key="frame" x="-2" y="333" width="600" height="218"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="314" id="YDZ-y2-STH"/>
+                                    <constraint firstAttribute="height" constant="210" id="cgc-h5-P0z"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ANH-2Q-xdW">
                                     <size key="itemSize" width="50" height="50"/>
@@ -346,7 +335,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKt-pR-ZkG">
                                 <rect key="frame" x="0.0" y="550" width="600" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="fMs-tw-bQF"/>
+                                    <constraint firstAttribute="height" constant="50" id="wLx-oq-8ko"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="New Collection"/>
@@ -354,22 +343,32 @@
                                     <action selector="newCollectionButtonPressed:" destination="0Yu-Fk-EHl" eventType="touchUpInside" id="3Wd-aP-DDs"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1p-IT-BbB">
+                                <rect key="frame" x="0.0" y="14" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="3wX-rD-VIf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="＜Ok"/>
+                                <connections>
+                                    <action selector="okButtonPressed:" destination="0Yu-Fk-EHl" eventType="touchUpInside" id="qlW-LA-pt9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="bhi-BK-N4X" firstAttribute="top" secondItem="i1p-IT-BbB" secondAttribute="bottom" constant="20" id="78Q-6q-dnb"/>
-                            <constraint firstItem="Eap-eD-c5W" firstAttribute="trailing" secondItem="hKt-pR-ZkG" secondAttribute="trailing" id="APc-xj-fUX"/>
-                            <constraint firstItem="O5g-eF-4p1" firstAttribute="top" secondItem="Eap-eD-c5W" secondAttribute="bottom" constant="49" id="CA9-Ye-BaA"/>
-                            <constraint firstItem="Eap-eD-c5W" firstAttribute="top" secondItem="i1p-IT-BbB" secondAttribute="bottom" constant="243" id="LGI-8I-GsT"/>
-                            <constraint firstItem="Eap-eD-c5W" firstAttribute="leading" secondItem="bhi-BK-N4X" secondAttribute="leading" id="LYS-Ie-45c"/>
-                            <constraint firstItem="i1p-IT-BbB" firstAttribute="leading" secondItem="wq5-KW-c47" secondAttribute="leadingMargin" constant="-10" id="Q5r-9p-2hv"/>
-                            <constraint firstItem="bhi-BK-N4X" firstAttribute="trailing" secondItem="Eap-eD-c5W" secondAttribute="trailing" id="UkU-8z-0dh"/>
-                            <constraint firstItem="Eap-eD-c5W" firstAttribute="leading" secondItem="wq5-KW-c47" secondAttribute="leading" id="WbO-gn-FrB"/>
-                            <constraint firstItem="hKt-pR-ZkG" firstAttribute="top" secondItem="bhi-BK-N4X" secondAttribute="bottom" constant="362" id="YK4-p8-xJF"/>
-                            <constraint firstItem="hKt-pR-ZkG" firstAttribute="leading" secondItem="Eap-eD-c5W" secondAttribute="leading" id="gjs-O0-6bj"/>
-                            <constraint firstItem="hKt-pR-ZkG" firstAttribute="bottom" secondItem="O5g-eF-4p1" secondAttribute="top" id="oIu-Ly-lh7"/>
-                            <constraint firstAttribute="trailing" secondItem="Eap-eD-c5W" secondAttribute="trailing" id="r1q-aH-qbM"/>
-                            <constraint firstItem="i1p-IT-BbB" firstAttribute="top" secondItem="wq5-KW-c47" secondAttribute="topMargin" constant="14" id="yDU-1r-Nv6"/>
+                            <constraint firstItem="i1p-IT-BbB" firstAttribute="leading" secondItem="bhi-BK-N4X" secondAttribute="leading" id="2E7-iG-lxE"/>
+                            <constraint firstItem="i1p-IT-BbB" firstAttribute="top" secondItem="wq5-KW-c47" secondAttribute="topMargin" constant="14" id="3x5-n5-unc"/>
+                            <constraint firstItem="hKt-pR-ZkG" firstAttribute="leading" secondItem="wq5-KW-c47" secondAttribute="leading" id="8hD-Ob-jB1"/>
+                            <constraint firstItem="bhi-BK-N4X" firstAttribute="top" secondItem="i1p-IT-BbB" secondAttribute="bottom" id="8hf-rf-SxP"/>
+                            <constraint firstItem="Eap-eD-c5W" firstAttribute="top" secondItem="bhi-BK-N4X" secondAttribute="bottom" constant="8" id="Fen-L0-xZ8"/>
+                            <constraint firstItem="hKt-pR-ZkG" firstAttribute="trailing" secondItem="bhi-BK-N4X" secondAttribute="trailing" id="Jjc-Aa-EJ6"/>
+                            <constraint firstItem="hKt-pR-ZkG" firstAttribute="bottom" secondItem="O5g-eF-4p1" secondAttribute="top" id="Olw-am-lJk"/>
+                            <constraint firstItem="Eap-eD-c5W" firstAttribute="leading" secondItem="wq5-KW-c47" secondAttribute="leadingMargin" constant="-22" id="RDk-J9-ShD"/>
+                            <constraint firstItem="O5g-eF-4p1" firstAttribute="top" secondItem="Eap-eD-c5W" secondAttribute="bottom" constant="49" id="WOp-by-6Ss"/>
+                            <constraint firstItem="bhi-BK-N4X" firstAttribute="leading" secondItem="hKt-pR-ZkG" secondAttribute="leading" id="Xak-cN-9Yq"/>
+                            <constraint firstAttribute="trailing" secondItem="hKt-pR-ZkG" secondAttribute="trailing" id="gKc-QK-gRN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Eap-eD-c5W" secondAttribute="trailing" constant="-18" id="oD6-BD-nDj"/>
                         </constraints>
                     </view>
                     <connections>
