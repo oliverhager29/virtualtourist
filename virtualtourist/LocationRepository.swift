@@ -14,7 +14,7 @@ class LocationRepository {
         return CoreDataStackManager.sharedInstance().managedObjectContext
     }
     /// for comparison of coordinates
-    static let DELTA : Double = 0.01
+    static let DELTA : Double = 0.000001
     
     /// add location
     /// :param: latitude latitude
@@ -22,35 +22,35 @@ class LocationRepository {
     static func add(latitude: Double, longitude: Double) {
         let pin = Pin(insertIntoManagedObjectContext: sharedContext, latitude: latitude, longitude: longitude, photos: [])
         do {
-         try sharedContext.save()
-        }
-        catch {
-            print("Saving a newly created pin failed")
-        }
-        FlickrClient.sharedInstance().getPhotosByLocation(latitude, longitude: longitude) {
-            result, error in
-            if let error = error as NSError? {
-                print(error)
-            }
-            else if let result = result as [Photo]? {
-                pin.photos = NSMutableOrderedSet(array: result)
-                dispatch_async(dispatch_get_main_queue()) {
-                    do {
-                        try self.sharedContext.save()
-                    }
-                    catch {
-                        print(error)
-                    }
+            try sharedContext.save()
+            FlickrClient.sharedInstance().getPhotosByLocation(latitude, longitude: longitude) {
+                result, error in
+                if let error = error as NSError? {
+                    print(error)
                 }
-                for photo in result {
-                    FlickrClient.sharedInstance().getImageByUrl(photo.url) {
-                        results, error in
-                        if let error = error {
+                else if let result = result as [Photo]? {
+                    pin.photos = NSMutableOrderedSet(array: result)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        do {
+                            try self.sharedContext.save()
+                        }
+                        catch {
                             print(error)
+                        }
+                    }
+                    for photo in result {
+                        FlickrClient.sharedInstance().getImageByUrl(photo.url) {
+                            results, error in
+                            if let error = error {
+                                print(error)
+                            }
                         }
                     }
                 }
             }
+        }
+        catch {
+            print("Saving a newly created pin failed")
         }
     }
     
@@ -70,8 +70,8 @@ class LocationRepository {
     /// :returns: found locations
     static func find(latitude: Double, longitude: Double) -> [Pin] {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
-        fetchRequest.predicate = NSPredicate(format: "abs(latitude - %@) <= %@ and abs(longitude - %@) <= %@", NSNumber(double:latitude), NSNumber(double:DELTA), NSNumber(double:longitude), NSNumber(double:DELTA));
-        //fetchRequest.predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", NSNumber(double:latitude), NSNumber(double:longitude))
+        //fetchRequest.predicate = NSPredicate(format: "abs(latitude - %@) <= %@ and abs(longitude - %@) <= %@", NSNumber(double:latitude), NSNumber(double:DELTA), NSNumber(double:longitude), NSNumber(double:DELTA));
+        fetchRequest.predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", NSNumber(double:latitude), NSNumber(double:longitude))
         do {
             let results = try sharedContext.executeFetchRequest(fetchRequest)
             return results as! [Pin]

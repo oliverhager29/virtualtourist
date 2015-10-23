@@ -73,7 +73,7 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
                 LocationRepository.remove(toDeleteAnnotation.coordinate.latitude, longitude: toDeleteAnnotation.coordinate.longitude)
                 self.mapView.removeAnnotation(toDeleteAnnotation)
             }
-            let annotation = MapLocation(title: "test tilte", locationName: "test", mediaURL: "http://www.google.com", coordinate: newCoordinate)
+            let annotation = MapLocation(title: "Location", locationName: "Flickr Location", mediaURL: "http://www.flickr.com", coordinate: newCoordinate)
             LocationRepository.add(newCoordinate.latitude, longitude: newCoordinate.longitude)
             self.mapView.addAnnotation(annotation)
             self.previousAnnotation = annotation
@@ -90,7 +90,6 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
             let myAnnotation = view.annotation! as! MapLocation
             let droppedAt : CLLocationCoordinate2D = myAnnotation.coordinate
             myAnnotation.coordinate = droppedAt
-            
         }
     }
     

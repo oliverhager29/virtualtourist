@@ -53,6 +53,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         mapView.delegate = self
         myCollectionView.delegate = self
         addAnnotation(mapLocation)
+        loadPhotos()
     }
     
     func loadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, noImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
@@ -112,12 +113,24 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     func reloadPhotos() {
         newCollectionButton.enabled = false
+        let tmpPhotos = pin.photos.array as! [Photo]
+        var photosToDelete : [Photo] = []
+        photosToDelete.appendContentsOf(tmpPhotos)
         pin.photos.removeAllObjects()
+        for photo in photosToDelete {
+            CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photo)
+        }
         CoreDataStackManager.sharedInstance().saveContext()
         loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, noImagesAlert: noImagesAlert, newCollectionButton: newCollectionButton)
         myCollectionView.reloadData()
     }
-        
+    
+    func loadPhotos() {
+        newCollectionButton.enabled = false
+        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, noImagesAlert: noImagesAlert, newCollectionButton: newCollectionButton)
+        myCollectionView.reloadData()
+    }
+
     /// add annotations to map
     /// - parameter mapview: map view
     /// :patam: locations for which annotations are created
@@ -198,7 +211,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         /* Get cell type */
         let cellReuseIdentifier = "DeletePhotoCollectionViewCell"
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as! DeletePhotoCollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as! DeletePhotoCollectionViewCell
         
         /* Set cell defaults */
         if indexPath.row < pin.photos.count {
@@ -212,7 +225,9 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// :param: collectionView collection view
     /// :param: indexPath index path (row) of selected cell
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let photoToDelete = self.pin.photos[indexPath.row] as! Photo
         self.pin.photos.removeObjectAtIndex(indexPath.row)
+        CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photoToDelete)
         CoreDataStackManager.sharedInstance().saveContext()
         myCollectionView.reloadData()
     }
