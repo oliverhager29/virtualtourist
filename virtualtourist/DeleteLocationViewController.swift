@@ -13,20 +13,22 @@ import MapKit
 
 /// DeleteLocationCollectionViewController - map that user to delete a location
 class DeleteLocationViewController: UIViewController, MKMapViewDelegate {
-    
+    /// reference to map view
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    var previousAnnotation : MapLocation?
+    /// if done button has been pressed go back to previous screen
     @IBAction func doneButtonPressed(sender: UIButton) {
         self.navigationController!.popViewControllerAnimated(true)
     }
 
     
     /// initialize the alerts and their handlers
+    /// setup view port of map as in the previous screen
+    /// :param: animated true if animated, false otherwise
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         mapView.delegate = self
@@ -37,6 +39,9 @@ class DeleteLocationViewController: UIViewController, MKMapViewDelegate {
             mapView.region = region
         }    }
     
+    /// initialize the alerts and their handlers
+    /// remember view port by persisting it
+    /// :param: animated true if animated, false otherwise
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         let object = UIApplication.sharedApplication().delegate
@@ -45,7 +50,7 @@ class DeleteLocationViewController: UIViewController, MKMapViewDelegate {
     }
     
     /// add annotations to map
-    /// - parameter mapview: map view
+    /// :param: mapview map view
     /// :param: locations for which annotations are created
     func addAnnotations(mapView: MKMapView!, locations: [Pin]) {
         for location in locations {
@@ -63,8 +68,8 @@ class DeleteLocationViewController: UIViewController, MKMapViewDelegate {
     }
     
     /// create/retrieve view with pin and annotation for a location in the map
-    /// - parameter mapView: map
-    /// :param annotation annotation for the location
+    /// :param: mapView map view
+    /// :param: annotation annotation for the location
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? MapLocation {
             let identifier = "pin"
@@ -76,8 +81,6 @@ class DeleteLocationViewController: UIViewController, MKMapViewDelegate {
             } else {
                 view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                                 view.canShowCallout = false
-//                                view.calloutOffset = CGPoint(x: -5, y: 5)
-//                                view.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
             }
             view.draggable = false
             return view
@@ -86,13 +89,16 @@ class DeleteLocationViewController: UIViewController, MKMapViewDelegate {
     }
     
     /// center map around users current location
-    /// :param mapView map
-    /// - parameter userLocation: user's current location
+    /// :param: mapView map view
+    /// :param: userLocation user's current location
     func mapView(mapView: MKMapView, didUpdateUserLocation
         userLocation: MKUserLocation) {
             mapView.centerCoordinate = userLocation.location!.coordinate
     }
     
+    /// pin has been selected and is deleted
+    /// :param: mapView map view
+    /// :param: didSelectAnnotationView annotation view
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         if let mapLocation = view.annotation as! MapLocation? {
             LocationRepository.remove(mapLocation.coordinate.latitude, longitude: mapLocation.coordinate.longitude)

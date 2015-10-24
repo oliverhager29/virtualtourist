@@ -11,6 +11,7 @@ import UIKit
 
 /// location collection view cell
 class DeletePhotoCollectionViewCell: UICollectionViewCell {
+    /// image view in cell for Flickr image
     @IBOutlet weak var imageView: UIImageView!
 
 }

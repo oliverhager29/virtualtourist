@@ -11,7 +11,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-/// ChooseLocationViewController - map that user to select location
+/// ChooseLocationViewController - map that allows user to select location
 class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
     /// error alert when having no images are available for a location
     var noImagesAlert: UIAlertController!
@@ -64,32 +64,20 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
     /// :param: gestureRecognizer gesture recognizer to detect long press on map
     func addAnnotation(gestureRecognizer:UIGestureRecognizer) {
         if gestureRecognizer.state == UIGestureRecognizerState.Ended {
+            if let newCoordinate = self.previousAnnotation?.coordinate {
+                LocationRepository.add(newCoordinate.latitude, longitude: newCoordinate.longitude)
+            }
             self.previousAnnotation = nil
         }
         else {
             let touchPoint = gestureRecognizer.locationInView(mapView)
             let newCoordinate = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
             if let toDeleteAnnotation = self.previousAnnotation {
-                LocationRepository.remove(toDeleteAnnotation.coordinate.latitude, longitude: toDeleteAnnotation.coordinate.longitude)
                 self.mapView.removeAnnotation(toDeleteAnnotation)
             }
             let annotation = MapLocation(title: "Location", locationName: "Flickr Location", mediaURL: "http://www.flickr.com", coordinate: newCoordinate)
-            LocationRepository.add(newCoordinate.latitude, longitude: newCoordinate.longitude)
             self.mapView.addAnnotation(annotation)
             self.previousAnnotation = annotation
-        }
-    }
-
-    /// drop pin
-    /// :param: mapView map view
-    /// :param: view annotation view
-    /// :param: newState new drag state
-    /// :param: oldState ol drag state
-    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-        if(newState == .Ending) {
-            let myAnnotation = view.annotation! as! MapLocation
-            let droppedAt : CLLocationCoordinate2D = myAnnotation.coordinate
-            myAnnotation.coordinate = droppedAt
         }
     }
     
@@ -104,11 +92,6 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
                 coordinate: CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
                 mapView.addAnnotation(mapLocation)
         }
-    }
-    
-    /// reload the other students locations (refresh button is pressed)
-    func reloadLocations() {
-
     }
     
     override func didReceiveMemoryWarning() {

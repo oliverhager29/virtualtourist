@@ -11,33 +11,47 @@ import UIKit
 import CoreLocation
 import MapKit
 
-/// DeletePhotoCollectionViewController - map that user to delete a photo
+/// DeletePhotoCollectionViewController - shows images associated with pin on map (selected in previous screen) and allows user to delete image(s)
 class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
  
     /// navigation item to enhance for a second right button
     @IBOutlet weak var myNavigationItem: UINavigationItem!
 
-
+    /// reference to map view
     @IBOutlet weak var mapView: MKMapView!
     
+    /// reference to collection view
     @IBOutlet weak var myCollectionView: UICollectionView!
     
+    /// new collection button
     @IBOutlet weak var newCollectionButton: UIButton!
     
     /// error alert when having no images are available for a location
     var noImagesAlert: UIAlertController!
+    
+    /// alert for failed image retrieval
     var errorRetrievingImagesAlert: UIAlertController!
     
+    /// map location
     var mapLocation: MapLocation!
+    
+    /// pin
     var pin: Pin!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    
     var previousAnnotation : MapLocation?
     
+    /// ok button pressed
     @IBAction func okButtonPressed(sender: UIButton) {
         self.navigationController!.popViewControllerAnimated(true)
     }
+    
+    /// new collection button pressed
     @IBAction func newCollectionButtonPressed(sender: UIButton) {
         reloadPhotos()
     }
@@ -56,6 +70,13 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         loadPhotos()
     }
     
+    /// load photos for a given Pin into the collection view
+    /// :param: pin Pin
+    /// :param: viewController view controller that contains map and collection view
+    /// :param: collectionView collection view
+    /// :param: errorRetrievingImagesAlert alert that image retrieval failed
+    /// :param: noImagesAlert alert that no images are available for Pin
+    /// :param: newCollectionButton new collection button
     func loadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, noImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
         FlickrClient.sharedInstance().getPhotosByLocation(pin.latitude, longitude: pin.longitude) {
             result, error in
@@ -101,16 +122,28 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         }
     }
     
+    /// get cell border sizes
+    /// get ceollection view cell size
+    /// :param: collectionView collection view
+    /// :param: layout collection view layout
+    /// :param: sizeForItemAtIndexPath cell position
+    /// :returns: border sizes
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5);
     }
     
+    /// get ceollection view cell size
+    /// :param: collectionView collection view
+    /// :param: layout collection view layout
+    /// :param: sizeForItemAtIndexPath cell position
+    /// :returns: cell size
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let screenSize = UIScreen.mainScreen().bounds
         let cellSize = (screenSize.size.width / 3.0) - (2.0 * 5.0)
         return CGSize(width: cellSize, height: cellSize)
     }
     
+    /// reload photos
     func reloadPhotos() {
         newCollectionButton.enabled = false
         let tmpPhotos = pin.photos.array as! [Photo]
@@ -125,6 +158,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         myCollectionView.reloadData()
     }
     
+    /// load photos
     func loadPhotos() {
         newCollectionButton.enabled = false
         loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, noImagesAlert: noImagesAlert, newCollectionButton: newCollectionButton)
