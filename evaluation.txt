@@ -1,0 +1,115 @@
+Criteria
+Does Not Meet Specifications
+Meets Specifications
+
+Exceeds Specifications
+(Completely Udacious)
+
+
+Core Data
+
+Does the app create a managed object context backed by a local SQLite store?
+• The app doesn’t contain a managed object context.
+• The app chooses another persistent store.
+OK • The app contains a correctly configured managed object context backed by a local SQLite store.
+Not Applicable
+
+
+Does the app use a managed object model created in the Xcode model editor?
+• The app project does not contain a .xcdatamodeld file.
+OK • The app uses a managed object model created in the XCode Model Editor. A .xcdatamodeld model file is present.
+Not Applicable
+
+
+Does the object model contain two entities: Pin and Photo?
+• The object model is missing one or both entities: Pin and Photo.
+• The object model contains both Pin and Photo entities.
+OK (MapRegion)• The object model contains additional entities.
+
+
+Does the object model contain a one-to-many relationship between the Pin and Photo entities, with an appropriate inverse?
+• The object model does not include a relationship between entities.
+• A relationship is present, but without an appropriate inverse.
+Ok • A one-to-many relationship between the Pin and Photo entities and its inverse are present.
+Not Applicable
+
+
+
+
+Travel Locations Map View
+
+Does the app contain a map view that allows users to drop pins with a touch and hold gesture?
+• The app does not have a map view.
+• The user cannot add pins by tapping and holding a spot on the map.
+• The app contain a map view that allows users to drop pins with a touch and hold gesture.
+Ok • The app contains a map view that allows users to drop pins with a touch and hold gesture. When the pin drops, users can drag the pin until their finger is lifted.
+
+
+Does the app transition to the Photo Album view when an existing pin is tapped?
+• The app does not transition to the photo album view.
+• The app transitions to the photo album view, but the images downloaded are not associated with the pin’s location.
+Ok • The app transitions to the photo album associated with the pin location.
+Not Applicable
+
+
+When pins are dropped on the map, are they persisted as Pin instances in Core Data?
+• When pins are dropped on the map, they are not added to Core Data.
+• The pins are added to Core Data, but the context is not saved.
+Ok •  When pins are dropped on the map, they are stored in Core Data and the context is saved.
+Not Applicable
+
+
+
+
+Photo Album View
+
+When a photo album view is opened for a pin that does not yet have any photos, does it begin to download images from Flickr?
+• The photo album view does not initiate a download when no photos exist for a pin.
+• When a Photo Album View is opened for a pin that does not yet have any photos, it initiates a download from Flickr.
+Ok • As soon as a pin is dropped on the map, the photos for that location are pre-fetched from Flickr.  
+
+
+Is the code for downloading images from Flickr encapsulated into a class?
+• The code for downloading photos is in the PhotoAlbumViewController class.
+Ok (FlickrClient and FlickrConvenience) • The code for downloading photos is in its own class, separate from the PhotoAlbumViewController.
+Not Applicable
+
+
+Are images shown with placeholders in a collection view while they download, and displayed as soon as possible?
+• The images are not displayed until all images are downloaded.
+Ok • Images display as they are downloaded. They are shown with placeholders in a collection view while they download, and displayed as soon as possible.
+Not Applicable
+
+
+Are Image files stored into the Documents directory, and are the paths to these files stored in Photo entities in Core Data, with a relationship to the pin?
+• Images files are held in memory.
+• Photo entities are not created in Core Data.
+• Photos are created, but are not related to their pin.
+Ok • Image data is stored in files in the Documents directory. Corresponding paths are stored in Photo instances in Core Data, with a relationship to the pin.
+Not Applicable
+
+
+Once all images have been downloaded can the user remove photos from the album by tapping the image in the collection view?
+• Tapping the image does not remove it from the album.
+• The image is removed from the collection view but not from Core Data.
+Ok • Once all images have been downloaded, the user can remove photos from the album by tapping the image in the collection view. Tapping the image removes it from the photo album, the booth in the collection view, and Core Data.
+Not Applicable
+
+
+When Photos are removed from an album, is the underlying file in the Documents directory deleted?
+• The file remains in the Documents directory after the photo has been removed from Core Data.
+• When a photo is removed from an album, the PhotoAlbumViewController explicitly deletes the underlying file in the Documents directory.
+OK (see prepareForDeletion method in Photo class)• Underlying files are automatically deleted when a Photo object is removed from Core Data, using code in the Photo managed object.
+
+
+Does the Photo Album view have a button that allows user to replace the images in a photo album with a new set of images downloaded from  Flickr?
+• The view does not have a button that initiates the download of a new photo album.
+Ok • The Photo Album view has a button that initiates the download of a new album, replacing the images in the photo album with a new set from  Flickr.
+Not Applicable
+
+
+If the Photo Album view is opened for a pin that already has photos, are they immediately displayed?
+• The photo album always downloads new images, even if the pin has already been assigned images.
+• The photo album is empty if a pin had previously been assigned images.
+Ok • If the Photo Album view is opened for a pin that previously had photos assigned, they are immediately displayed. No new download is needed.
+Not Applicable
