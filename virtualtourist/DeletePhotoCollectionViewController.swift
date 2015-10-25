@@ -78,7 +78,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// :param: noImagesAlert alert that no images are available for Pin
     /// :param: newCollectionButton new collection button
     func loadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, noImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
-        FlickrClient.sharedInstance().getPhotosByLocation(pin.latitude, longitude: pin.longitude) {
+        FlickrClient.sharedInstance().getPhotosByLocation(pin) {
             result, error in
             if let error = error {
                 print(error)

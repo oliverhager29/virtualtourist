@@ -23,7 +23,6 @@ class ImageCache {
         }
         
         let path = pathForIdentifier(identifier!)
-        var data: NSData?
         
         // First try the memory cache
         if let image = inMemoryCache.objectForKey(path) as? UIImage {

@@ -23,9 +23,8 @@ class LocationRepository {
         let pin = Pin(insertIntoManagedObjectContext: sharedContext, latitude: latitude, longitude: longitude, photos: [])
         do {
             try sharedContext.save()
-            FlickrClient.sharedInstance().getPhotosByLocation(latitude, longitude: longitude) {
-                result, error in
-                if let error = error as NSError? {
+            FlickrClient.sharedInstance().getPhotosByLocation(pin) {
+                result, error in                if let error = error as NSError? {
                     print(error)
                 }
                 else if let result = result as [Photo]? {
@@ -39,6 +38,7 @@ class LocationRepository {
                         }
                     }
                     for photo in result {
+                        photo.pin = pin
                         FlickrClient.sharedInstance().getImageByUrl(photo.url) {
                             results, error in
                             if let error = error {

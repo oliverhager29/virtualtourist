@@ -24,7 +24,6 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIBarButtonItem(image: UIImage(named: "pin"), style: UIBarButtonItemStyle.Plain, target: self, action: "checkPostLocation")
     }
     var previousAnnotation : MapLocation?
     
@@ -134,7 +133,7 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
     /// - parameter view: annotation view
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         if let mapLocation = view.annotation as! MapLocation? {
-            var controller = self.storyboard!.instantiateViewControllerWithIdentifier("DeletePhotoCollectionViewController") as! DeletePhototCollectionViewController
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("DeletePhotoCollectionViewController") as! DeletePhototCollectionViewController
             controller.mapLocation = mapLocation
             let pins = LocationRepository.find(mapLocation.coordinate.latitude, longitude: mapLocation.coordinate.longitude)
             if !pins.isEmpty {

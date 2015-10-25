@@ -24,13 +24,13 @@ class FlickrConfig: NSObject, NSCoding {
     var dateUpdated: NSDate? = nil
     
     /* Returns the number days since the config was last updated */
-    var daysSinceLastUpdate: Int? {
-        if let lastUpdate = dateUpdated {
-            return Int(NSDate().timeIntervalSinceDate(lastUpdate)) / 60*60*24
-        } else {
-            return nil
-        }
-    }
+//    var daysSinceLastUpdate: Int? {
+//        if let lastUpdate = dateUpdated {
+//            return Int(NSDate().timeIntervalSinceDate(lastUpdate)) / 60*60*24
+//        } else {
+//            return nil
+//        }
+//    }
     
     // MARK: Initialization
     

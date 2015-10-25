@@ -34,10 +34,10 @@ extension FlickrClient {
     /// :param: latitude latitude
     /// :param: longitude longitude
     /// :param: completionHandler completion handler to retrieve Photos entities or handle error
-    func getPhotosByLocation(latitude: Double, longitude: Double, completionHandler: (result: [Photo]?, error: NSError?) -> Void) {
+    func getPhotosByLocation(pin: Pin, completionHandler: (result: [Photo]?, error: NSError?) -> Void) {
         
         /* 1. Specify parameters, method (if has {key}), and HTTP body (if POST) */
-        let parameters : [String : AnyObject] = [FlickrClient.ParameterKeys.Latitude: latitude, FlickrClient.ParameterKeys.Longitude: longitude, FlickrClient.ParameterKeys.Format: FlickrClient.ParameterConstants.FormatJson, FlickrClient.ParameterKeys.NoJsonCallBack: FlickrClient.ParameterConstants.NoJsonCallBackTrue]
+        let parameters : [String : AnyObject] = [FlickrClient.ParameterKeys.Latitude: pin.latitude, FlickrClient.ParameterKeys.Longitude: pin.longitude, FlickrClient.ParameterKeys.Format: FlickrClient.ParameterConstants.FormatJson, FlickrClient.ParameterKeys.NoJsonCallBack: FlickrClient.ParameterConstants.NoJsonCallBackTrue]
         
         /* 2. Make the request */
         taskForGETMethod(FlickrClient.Methods.SearchPhotos, parameters: parameters) { JSONResult, error in
@@ -61,7 +61,7 @@ extension FlickrClient {
                         let jsonParams : [String : AnyObject] = [FlickrClient.JSONResponseKeys.Id: id, FlickrClient.JSONResponseKeys.Secret: secret, FlickrClient.JSONResponseKeys.ServerId: server, FlickrClient.JSONResponseKeys.FarmId: farm]
                         
                         let urlFilled = self.fillUrl(FlickrClient.Constants.ImageBaseURL, parameters: jsonParams)
-                            let photo = Photo(insertIntoManagedObjectContext: CoreDataStackManager.sharedInstance().managedObjectContext, id: id, owner: owner, secret: secret, server: server, farm: farm, title: title, url: urlFilled, latitude: latitude, longitude: longitude)
+                            let photo = Photo(insertIntoManagedObjectContext: CoreDataStackManager.sharedInstance().managedObjectContext, id: id, owner: owner, secret: secret, server: server, farm: farm, title: title, url: urlFilled, pin: pin)
                         photos.append(photo)
                     }
                     completionHandler(result: photos, error: nil)

@@ -18,8 +18,7 @@ class Photo : NSManagedObject {
     @NSManaged var farm : String
     @NSManaged var title : String
     @NSManaged var url : String
-    @NSManaged var latitude : Double
-    @NSManaged var longitude : Double
+    @NSManaged var pin : Pin
     
     /// initialize managed object
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -27,7 +26,7 @@ class Photo : NSManagedObject {
     }
     
     /// initialize managed object with passed properties
-    init(insertIntoManagedObjectContext context: NSManagedObjectContext, id: String, owner: String, secret: String, server: String, farm: String, title: String, url: String, latitude: Double, longitude: Double) {
+    init(insertIntoManagedObjectContext context: NSManagedObjectContext, id: String, owner: String, secret: String, server: String, farm: String, title: String, url: String, pin: Pin) {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         self.id = id
@@ -37,8 +36,7 @@ class Photo : NSManagedObject {
         self.farm = farm
         self.title = title
         self.url = url
-        self.latitude = latitude
-        self.longitude = longitude
+        self.pin = pin
     }
     
     /// delete file for image associated with Photo entity
