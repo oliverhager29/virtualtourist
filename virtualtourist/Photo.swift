@@ -42,6 +42,10 @@ class Photo : NSManagedObject {
     /// delete file for image associated with Photo entity
     override func prepareForDeletion() {
         super.prepareForDeletion()
-        FlickrClient.sharedInstance().deleteImage(url)
+        FlickrClient.sharedInstance().deleteImage(getUniqueKey())
+    }
+    
+    func getUniqueKey() -> String {
+        return "_\(pin.latitude)_\(pin.longitude)#"+url
     }
 }

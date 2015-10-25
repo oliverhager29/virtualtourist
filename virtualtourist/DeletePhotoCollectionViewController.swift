@@ -67,7 +67,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         mapView.delegate = self
         myCollectionView.delegate = self
         addAnnotation(mapLocation)
-        loadPhotos()
     }
     
     /// load photos for a given Pin into the collection view
@@ -97,7 +96,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
                     CoreDataStackManager.sharedInstance().saveContext()
                     for obj in pin.photos {
                         let photo = obj as! Photo
-                        FlickrClient.sharedInstance().getImageByUrl(photo.url) {
+                        FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
                             result, error in
                             if let error = error {
                                 print(error)
@@ -243,15 +242,18 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// :param: index path to cell to filled with content
     /// :returns: filled collection view cell
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        /* Get cell type */
-        let cellReuseIdentifier = "DeletePhotoCollectionViewCell"
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as! DeletePhotoCollectionViewCell
-        
-        /* Set cell defaults */
         if indexPath.row < pin.photos.count {
             let photo = pin.photos[indexPath.row] as! Photo
-            cell.imageView.image = FlickrClient.Caches.imageCache.imageWithIdentifier(photo.url)
+            
+            if let uiImage = FlickrClient.Caches.imageCache.imageWithIdentifier(photo.getUniqueKey()) {
+                let cellReuseIdentifier = "DeletePhotoCollectionViewCell"
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as! DeletePhotoCollectionViewCell
+                cell.imageView.image = uiImage
+                return cell
+            }
         }
+        let cellReuseIdentifier = "PlaceHolderCollectionViewCell"
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath)
         return cell
     }
     

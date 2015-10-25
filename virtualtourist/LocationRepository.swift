@@ -28,8 +28,8 @@ class LocationRepository {
                     print(error)
                 }
                 else if let result = result as [Photo]? {
-                    pin.photos = NSMutableOrderedSet(array: result)
                     dispatch_async(dispatch_get_main_queue()) {
+                        pin.photos = NSMutableOrderedSet(array: result)
                         do {
                             try self.sharedContext.save()
                         }
@@ -38,11 +38,16 @@ class LocationRepository {
                         }
                     }
                     for photo in result {
-                        photo.pin = pin
-                        FlickrClient.sharedInstance().getImageByUrl(photo.url) {
+                        FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
                             results, error in
                             if let error = error {
                                 print(error)
+                            }
+                            dispatch_async(dispatch_get_main_queue()) {
+                                photo.pin = pin
+                                if self.sharedContext.deletedObjects.contains(pin) {
+                                    FlickrClient.sharedInstance().deleteImage(photo.getUniqueKey())
+                                }
                             }
                         }
                     }
@@ -60,7 +65,17 @@ class LocationRepository {
     static func remove(latitude: Double, longitude: Double) {
         let pins = find(latitude, longitude: longitude)
         for pin in pins {
+           for photo in pin.photos {
+              let photoToDelete = photo as! Photo
+              sharedContext.deleteObject(photoToDelete)
+           }
            sharedContext.deleteObject(pin)
+            do {
+                try self.sharedContext.save()
+            }
+            catch {
+                print(error)
+            }
         }
     }
     

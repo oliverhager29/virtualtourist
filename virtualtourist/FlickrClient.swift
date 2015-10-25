@@ -114,9 +114,12 @@ class FlickrClient : NSObject {
         }
         /* 1. Set the parameters */
         // There are none...
-        
+        var urlToDownload = url
+        if let startIndex = url.characters.indexOf("#") {
+            urlToDownload = url.substringFromIndex(startIndex.successor())
+        }
         /* 2/3. Build the URL and configure the request */
-        let urlObj = NSURL(string: url)!
+        let urlObj = NSURL(string: urlToDownload)!
         let request = NSURLRequest(URL: urlObj)
         
         /* 4. Make the request */

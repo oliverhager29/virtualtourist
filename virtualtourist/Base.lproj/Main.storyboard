@@ -203,6 +203,24 @@
                                             <outlet property="imageView" destination="Ywy-UB-8CL" id="v5c-Qz-o3L"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PlaceHolderCollectionViewCell" id="PBR-oA-lWA">
+                                        <rect key="frame" x="61" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="W77-dK-oUT">
+                                                    <rect key="frame" x="7" y="6" width="37" height="37"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="W77-dK-oUT" firstAttribute="centerX" secondItem="PBR-oA-lWA" secondAttribute="centerX" id="K9V-eB-Bx6"/>
+                                            <constraint firstItem="W77-dK-oUT" firstAttribute="centerY" secondItem="PBR-oA-lWA" secondAttribute="centerY" id="PpL-bt-cWL"/>
+                                        </constraints>
+                                    </collectionViewCell>
                                 </cells>
                                 <connections>
                                     <outlet property="dataSource" destination="0Yu-Fk-EHl" id="cd8-kC-QUZ"/>

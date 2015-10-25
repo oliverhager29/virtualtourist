@@ -39,7 +39,7 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
         self.errorRetrievingImagesAlert = UIAlertController(title: "Error", message: "Failed to retrieve images", preferredStyle: UIAlertControllerStyle.Alert)
         self.errorRetrievingImagesAlert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: "addAnnotation:")
-        longPressGesture.minimumPressDuration = 2.0
+        longPressGesture.minimumPressDuration = 1.0
         mapView.delegate = self
         mapView.addGestureRecognizer(longPressGesture)
         let object = UIApplication.sharedApplication().delegate
@@ -47,6 +47,7 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
         if let region = appDelegate.region {
             mapView.region = region
         }
+        mapView.removeAnnotations(mapView.annotations)
         addAnnotations(mapView, locations: LocationRepository.findAll())
     }
     

@@ -14,6 +14,7 @@ class Pin : NSManagedObject {
     @NSManaged var latitude : Double
     @NSManaged var longitude : Double
     @NSManaged var photos : NSMutableOrderedSet
+    @NSManaged var isDownloadCompleted : Bool
     
     /// initialize managed object
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -27,5 +28,6 @@ class Pin : NSManagedObject {
         self.latitude = latitude
         self.longitude = longitude
         self.photos = photos
+        self.isDownloadCompleted = false
     }
 }
