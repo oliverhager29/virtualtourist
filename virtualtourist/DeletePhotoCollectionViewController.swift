@@ -18,9 +18,9 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     let REMOVE_SELECTED_PICTURES = "Remove Selected Picture"
     
-    /// navigation item to enhance for a second right button
-    @IBOutlet weak var myNavigationItem: UINavigationItem!
-
+    /// no images label when having no images are available for a location
+    @IBOutlet weak var noImagesLabel: UILabel!
+    
     /// reference to map view
     @IBOutlet weak var mapView: MKMapView!
     
@@ -29,9 +29,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     /// new collection button
     @IBOutlet weak var newCollectionButton: UIButton!
-    
-    /// error alert when having no images are available for a location
-    var noImagesAlert: UIAlertController!
     
     /// alert for failed image retrieval
     var errorRetrievingImagesAlert: UIAlertController!
@@ -59,20 +56,16 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     /// new collection button pressed
     @IBAction func newCollectionButtonPressed(sender: UIButton) {
-        if(self.selectedCellIndexes.isEmpty) {
-            reloadPhotos()
-        }
-        else {
+        if(!self.selectedCellIndexes.isEmpty) {
             deleteCells(self.selectedCellIndexes)
             self.selectedCellIndexes.removeAll()
         }
+        reloadPhotos()
     }
     
     /// initialize the alerts and their handlers
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.noImagesAlert = UIAlertController(title: "Error", message: "No images available", preferredStyle: UIAlertControllerStyle.Alert)
-        self.noImagesAlert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         self.errorRetrievingImagesAlert = UIAlertController(title: "Error", message: "Failed to retrieve images", preferredStyle: UIAlertControllerStyle.Alert)
         self.errorRetrievingImagesAlert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         myCollectionView.allowsSelection = true
@@ -82,16 +75,19 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         addAnnotation(mapLocation)
         selectedCellIndexes = []
         newCollectionButton.setTitle(NEW_COLLECTION, forState: UIControlState.Normal)
-        newCollectionButton.enabled = pin.isDownloadCompleted
+        newCollectionButton.enabled = LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) && !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]!
         let qualityOfServiceClass = QOS_CLASS_BACKGROUND
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
-        if !pin.isDownloadCompleted {
+        //if !pin.isDownloadCompleted {
+        if LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) && !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]! {
             dispatch_async(dispatch_get_main_queue(), {
                 self.myCollectionView.allowsSelection = false
                 self.myCollectionView.allowsMultipleSelection = false
+                self.newCollectionButton.enabled = false
             })
             dispatch_async(backgroundQueue, {
-                while !self.pin.isDownloadCompleted {
+                //while !self.pin.isDownloadCompleted {
+                while !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]! {
                     NSThread.sleepForTimeInterval(1)
                     dispatch_async(dispatch_get_main_queue(), {
                         self.myCollectionView.reloadData()
@@ -100,13 +96,34 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
                 dispatch_async(dispatch_get_main_queue(), {
                     self.newCollectionButton.enabled = true
                     if self.pin.photos.count == 0 {
-                        self.presentViewController(self.noImagesAlert, animated: true, completion: nil)
+                        //self.presentViewController(self.noImagesAlert, animated: true, completion: nil)
+                        self.myCollectionView.hidden = true
+                        self.noImagesLabel.hidden = false
+                    }
+                    else {
+                        self.myCollectionView.hidden = false
+                        self.noImagesLabel.hidden = true
                     }
                     self.myCollectionView.allowsSelection = true
                     self.myCollectionView.allowsMultipleSelection = true
                     self.myCollectionView.reloadData()
                 })
             })
+        }
+        else {
+            self.newCollectionButton.enabled = true
+            if self.pin.photos.count == 0 {
+                //self.presentViewController(self.noImagesAlert, animated: true, completion: nil)
+                self.myCollectionView.hidden = true
+                self.noImagesLabel.hidden = false
+            }
+            else {
+                self.myCollectionView.hidden = false
+                self.noImagesLabel.hidden = true
+            }
+            self.myCollectionView.allowsSelection = true
+            self.myCollectionView.allowsMultipleSelection = true
+            self.myCollectionView.reloadData()
         }
     }
     
@@ -117,7 +134,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// :param: errorRetrievingImagesAlert alert that image retrieval failed
     /// :param: noImagesAlert alert that no images are available for Pin
     /// :param: newCollectionButton new collection button
-    func loadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, noImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
+    func loadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
         FlickrClient.sharedInstance().getPhotosByLocation(pin) {
             result, error in
             if let error = error {
@@ -130,8 +147,9 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
                 newCollectionButton.enabled = false
                 if result!.isEmpty {
                     dispatch_async(dispatch_get_main_queue(), {
-                        viewController.presentViewController(noImagesAlert, animated: true, completion: nil)
                         newCollectionButton.enabled = true
+                        self.myCollectionView.hidden = true
+                        self.noImagesLabel.hidden = false
                     })
                 }
                 else {
@@ -203,14 +221,14 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
             CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photo)
         }
         CoreDataStackManager.sharedInstance().saveContext()
-        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, noImagesAlert: noImagesAlert, newCollectionButton: newCollectionButton)
+        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, newCollectionButton: newCollectionButton)
         myCollectionView.reloadData()
     }
     
     /// load photos
     func loadPhotos() {
         newCollectionButton.enabled = false
-        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, noImagesAlert: noImagesAlert, newCollectionButton: newCollectionButton)
+        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, newCollectionButton: newCollectionButton)
         myCollectionView.reloadData()
     }
 

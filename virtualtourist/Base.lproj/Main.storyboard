@@ -226,6 +226,12 @@
                                     <outlet property="dataSource" destination="0Yu-Fk-EHl" id="cd8-kC-QUZ"/>
                                 </connections>
                             </collectionView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="The pin has no images." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2hI-iw-buQ">
+                                <rect key="frame" x="0.0" y="165" width="600" height="271"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKt-pR-ZkG">
                                 <rect key="frame" x="0.0" y="550" width="600" height="50"/>
                                 <constraints>
@@ -259,16 +265,19 @@
                             <constraint firstItem="hKt-pR-ZkG" firstAttribute="trailing" secondItem="bhi-BK-N4X" secondAttribute="trailing" id="Jjc-Aa-EJ6"/>
                             <constraint firstItem="hKt-pR-ZkG" firstAttribute="bottom" secondItem="O5g-eF-4p1" secondAttribute="top" id="Olw-am-lJk"/>
                             <constraint firstItem="Eap-eD-c5W" firstAttribute="leading" secondItem="wq5-KW-c47" secondAttribute="leadingMargin" constant="-22" id="RDk-J9-ShD"/>
+                            <constraint firstItem="2hI-iw-buQ" firstAttribute="centerY" secondItem="Eap-eD-c5W" secondAttribute="centerY" id="SEI-p4-uiA"/>
                             <constraint firstItem="O5g-eF-4p1" firstAttribute="top" secondItem="Eap-eD-c5W" secondAttribute="bottom" constant="49" id="WOp-by-6Ss"/>
                             <constraint firstItem="bhi-BK-N4X" firstAttribute="leading" secondItem="hKt-pR-ZkG" secondAttribute="leading" id="Xak-cN-9Yq"/>
                             <constraint firstAttribute="trailing" secondItem="hKt-pR-ZkG" secondAttribute="trailing" id="gKc-QK-gRN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Eap-eD-c5W" secondAttribute="trailing" constant="-18" id="oD6-BD-nDj"/>
+                            <constraint firstItem="2hI-iw-buQ" firstAttribute="centerX" secondItem="Eap-eD-c5W" secondAttribute="centerX" id="vvL-CD-UQ4"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="bhi-BK-N4X" id="wQz-Tf-z7J"/>
                         <outlet property="myCollectionView" destination="Eap-eD-c5W" id="GCg-gD-5o4"/>
                         <outlet property="newCollectionButton" destination="hKt-pR-ZkG" id="T18-ZX-pfv"/>
+                        <outlet property="noImagesLabel" destination="2hI-iw-buQ" id="p9l-U7-lMu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4vJ-C4-Xne" userLabel="First Responder" sceneMemberID="firstResponder"/>

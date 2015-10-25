@@ -16,11 +16,14 @@ class LocationRepository {
     /// for comparison of coordinates
     static let DELTA : Double = 0.000001
     
+    static var pinDownloadCompleted = Dictionary<String, Bool>()
+    
     /// add location
     /// :param: latitude latitude
     /// :param: longitude longitude
     static func add(latitude: Double, longitude: Double) {
         let pin = Pin(insertIntoManagedObjectContext: sharedContext, latitude: latitude, longitude: longitude, photos: [])
+        LocationRepository.pinDownloadCompleted.removeValueForKey(pin.getUniqueKey())
         do {
             try sharedContext.save()
             FlickrClient.sharedInstance().getPhotosByLocation(pin) {
@@ -37,29 +40,37 @@ class LocationRepository {
                             print(error)
                         }
                     }
-                    pin.isDownloadCompleted = false
-                    for photo in result {
-                        photo.isDownloadCompleted = false
-                        FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
-                            results, error in
-                            photo.isDownloadCompleted = true
-                            if let error = error {
-                                print(error)
-                            }
-                            dispatch_async(dispatch_get_main_queue()) {
-                                var allDownloadsCompleted = true
-                                for tmpObj in pin.photos {
-                                    let tmpPhoto = tmpObj as! Photo
-                                    if !tmpPhoto.isDownloadCompleted {
-                                        allDownloadsCompleted = false
+                    if result.isEmpty {
+                        //pin.isDownloadCompleted = true
+                        LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
+                    }
+                    else {
+                        //pin.isDownloadCompleted = false
+                        LocationRepository.pinDownloadCompleted.updateValue(false, forKey: pin.getUniqueKey())
+                        for photo in result {
+                            photo.isDownloadCompleted = false
+                            FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
+                                results, error in
+                                photo.isDownloadCompleted = true
+                                if let error = error {
+                                    print(error)
+                                }
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    var allDownloadsCompleted = true
+                                    for tmpObj in pin.photos {
+                                        let tmpPhoto = tmpObj as! Photo
+                                        if !tmpPhoto.isDownloadCompleted {
+                                            allDownloadsCompleted = false
+                                        }
                                     }
-                                }
-                                if allDownloadsCompleted {
-                                    pin.isDownloadCompleted = true
-                                }
-                                photo.pin = pin
-                                if self.sharedContext.deletedObjects.contains(pin) {
-                                    FlickrClient.sharedInstance().deleteImage(photo.getUniqueKey())
+                                    if allDownloadsCompleted {
+                                        //pin.isDownloadCompleted = true
+                                        LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
+                                    }
+                                    photo.pin = pin
+                                    if self.sharedContext.deletedObjects.contains(pin) {
+                                        FlickrClient.sharedInstance().deleteImage(photo.getUniqueKey())
+                                    }
                                 }
                             }
                         }

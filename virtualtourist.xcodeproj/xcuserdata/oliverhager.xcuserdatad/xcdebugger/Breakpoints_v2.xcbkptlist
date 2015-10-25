@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "466917581.15826"
+            timestampString = "467489282.323644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
             landmarkName = "add(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -136,27 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467445612.536813"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "239"
+            endingLineNumber = "239"
             landmarkName = "addAnnotation(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -232,11 +216,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
             landmarkName = "DeletePhototCollectionViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -278,11 +262,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467449678.988526"
+            timestampString = "467490268.352689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "find(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -294,11 +278,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467449678.988526"
+            timestampString = "467490268.352689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
             landmarkName = "getMapRegion()"
             landmarkType = "5">
          </BreakpointContent>
@@ -310,11 +294,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467449678.988526"
+            timestampString = "467490268.352689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "updateMapRegion(_:longitude:latitudeDelta:longitudeDelta:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -342,11 +326,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
             landmarkName = "collectionView(_:layout:sizeForItemAtIndexPath:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -390,11 +374,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "reloadPhotos()"
             landmarkType = "5">
          </BreakpointContent>
@@ -406,11 +390,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
             landmarkName = "reloadPhotos()"
             landmarkType = "5">
          </BreakpointContent>
@@ -422,11 +406,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "287"
-            endingLineNumber = "287"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "collectionView(_:numberOfItemsInSection:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -438,12 +422,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
-            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:noImagesAlert:newCollectionButton:)"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:newCollectionButton:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -454,12 +438,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:noImagesAlert:newCollectionButton:)"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:newCollectionButton:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -470,12 +454,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
-            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:noImagesAlert:newCollectionButton:)"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
+            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:newCollectionButton:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -486,12 +470,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:noImagesAlert:newCollectionButton:)"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
+            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:newCollectionButton:)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -552,11 +536,11 @@
             ignoreCount = "15"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467449678.988526"
+            timestampString = "467490268.352689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "remove(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -568,11 +552,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467449678.988526"
+            timestampString = "467490268.352689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "add(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -600,11 +584,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467398639.489197"
+            timestampString = "467489282.323644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "add(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -616,11 +600,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467423217.237409"
+            timestampString = "467489282.323644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "add(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -632,11 +616,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/LocationRepository.swift"
-            timestampString = "467449678.988526"
+            timestampString = "467490268.352689"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "add(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -776,11 +760,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "353"
-            endingLineNumber = "353"
+            startingLineNumber = "371"
+            endingLineNumber = "371"
             landmarkName = "deleteCells(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -792,12 +776,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
+            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:newCollectionButton:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
+            timestampString = "467491525.828762"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:newCollectionButton:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "163"
             endingLineNumber = "163"
-            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:noImagesAlert:newCollectionButton:)"
+            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:newCollectionButton:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -808,12 +824,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
-            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:noImagesAlert:newCollectionButton:)"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -824,12 +840,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
-            landmarkName = "loadPhotos(_:viewController:collectionView:errorRetrievingImagesAlert:noImagesAlert:newCollectionButton:)"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -839,12 +855,28 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            filePath = "virtualtourist/LocationRepository.swift"
+            timestampString = "467489282.323644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "add(_:longitude:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
+            timestampString = "467491525.828762"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -856,12 +888,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "virtualtourist/DeletePhotoCollectionViewController.swift"
-            timestampString = "467450447.003467"
+            timestampString = "467491525.828762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "viewWillAppear(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "virtualtourist/LocationRepository.swift"
+            timestampString = "467490268.352689"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "add(_:longitude:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

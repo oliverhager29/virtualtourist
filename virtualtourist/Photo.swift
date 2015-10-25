@@ -47,7 +47,9 @@ class Photo : NSManagedObject {
         FlickrClient.sharedInstance().deleteImage(getUniqueKey())
     }
     
+    /// get unique key
+    /// :returns: unique key
     func getUniqueKey() -> String {
-        return "_\(pin.latitude)_\(pin.longitude)#"+url
+        return "\(pin.getUniqueKey())#"+url
     }
 }
