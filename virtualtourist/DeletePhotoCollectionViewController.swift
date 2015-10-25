@@ -13,7 +13,11 @@ import MapKit
 
 /// DeletePhotoCollectionViewController - shows images associated with pin on map (selected in previous screen) and allows user to delete image(s)
 class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
- 
+
+    let NEW_COLLECTION = "New Collection"
+    
+    let REMOVE_SELECTED_PICTURES = "Remove Selected Picture"
+    
     /// navigation item to enhance for a second right button
     @IBOutlet weak var myNavigationItem: UINavigationItem!
 
@@ -38,6 +42,8 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// pin
     var pin: Pin!
     
+    /// selected cells in collection view
+    var selectedCellIndexes : [Int] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +59,13 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     /// new collection button pressed
     @IBAction func newCollectionButtonPressed(sender: UIButton) {
-        reloadPhotos()
+        if(self.selectedCellIndexes.isEmpty) {
+            reloadPhotos()
+        }
+        else {
+            deleteCells(self.selectedCellIndexes)
+            self.selectedCellIndexes.removeAll()
+        }
     }
     
     /// initialize the alerts and their handlers
@@ -64,9 +76,38 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         self.errorRetrievingImagesAlert = UIAlertController(title: "Error", message: "Failed to retrieve images", preferredStyle: UIAlertControllerStyle.Alert)
         self.errorRetrievingImagesAlert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         myCollectionView.allowsSelection = true
+        myCollectionView.allowsMultipleSelection = true
         mapView.delegate = self
         myCollectionView.delegate = self
         addAnnotation(mapLocation)
+        selectedCellIndexes = []
+        newCollectionButton.setTitle(NEW_COLLECTION, forState: UIControlState.Normal)
+        newCollectionButton.enabled = pin.isDownloadCompleted
+        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+        if !pin.isDownloadCompleted {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.myCollectionView.allowsSelection = false
+                self.myCollectionView.allowsMultipleSelection = false
+            })
+            dispatch_async(backgroundQueue, {
+                while !self.pin.isDownloadCompleted {
+                    NSThread.sleepForTimeInterval(1)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.myCollectionView.reloadData()
+                    })
+                }
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.newCollectionButton.enabled = true
+                    if self.pin.photos.count == 0 {
+                        self.presentViewController(self.noImagesAlert, animated: true, completion: nil)
+                    }
+                    self.myCollectionView.allowsSelection = true
+                    self.myCollectionView.allowsMultipleSelection = true
+                    self.myCollectionView.reloadData()
+                })
+            })
+        }
     }
     
     /// load photos for a given Pin into the collection view
@@ -86,9 +127,11 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
                 })
             }
             else {
+                newCollectionButton.enabled = false
                 if result!.isEmpty {
                     dispatch_async(dispatch_get_main_queue(), {
                         viewController.presentViewController(noImagesAlert, animated: true, completion: nil)
+                        newCollectionButton.enabled = true
                     })
                 }
                 else {
@@ -96,8 +139,10 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
                     CoreDataStackManager.sharedInstance().saveContext()
                     for obj in pin.photos {
                         let photo = obj as! Photo
+                        photo.isDownloadCompleted = false
                         FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
                             result, error in
+                            photo.isDownloadCompleted = true
                             if let error = error {
                                 print(error)
                                 dispatch_async(dispatch_get_main_queue(), {
@@ -106,16 +151,21 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
                             }
                             else if result != nil {
                                 dispatch_async(dispatch_get_main_queue()) {
-                                    if collectionView != nil {
+                                    var allDownloadsCompleted = true
+                                    for tmpObj in pin.photos {
+                                        let tmpPhoto = tmpObj as! Photo
+                                        if !tmpPhoto.isDownloadCompleted {
+                                            allDownloadsCompleted = false
+                                        }
+                                    }
+                                    if allDownloadsCompleted && collectionView != nil {
+                                        newCollectionButton.enabled = true
                                         collectionView.reloadData()
                                     }
                                 }
                             }
                         }
                     }
-                }
-                dispatch_async(dispatch_get_main_queue()) {
-                    newCollectionButton.enabled = true
                 }
             }
         }
@@ -249,6 +299,14 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
                 let cellReuseIdentifier = "DeletePhotoCollectionViewCell"
                 let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellReuseIdentifier, forIndexPath: indexPath) as! DeletePhotoCollectionViewCell
                 cell.imageView.image = uiImage
+                if self.selectedCellIndexes.indexOf(indexPath.row) != nil {
+                    cell.layer.borderWidth = 5.0
+                    cell.layer.borderColor = UIColor.whiteColor().CGColor
+                }
+                else {
+                    cell.layer.borderWidth = 5.0
+                    cell.layer.borderColor = UIColor.blackColor().CGColor
+                }
                 return cell
             }
         }
@@ -257,13 +315,49 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         return cell
     }
     
-    /// cell was selected and web browser window is opened with the media URL of the selected location
+    /// cell to delete is selected and high lighted
     /// :param: collectionView collection view
     /// :param: indexPath index path (row) of selected cell
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let photoToDelete = self.pin.photos[indexPath.row] as! Photo
-        self.pin.photos.removeObjectAtIndex(indexPath.row)
-        CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photoToDelete)
+        self.selectedCellIndexes.append(indexPath.row)
+        if let cell = self.myCollectionView.cellForItemAtIndexPath(indexPath) {
+            cell.layer.borderWidth = 5.0
+            cell.layer.borderColor = UIColor.whiteColor().CGColor
+        }
+        newCollectionButton.setTitle(REMOVE_SELECTED_PICTURES, forState: UIControlState.Normal)
+    }
+    
+    /// cell to delete is selected and high lighted
+    /// :param: collectionView collection view
+    /// :param: indexPath index path (row) of selected cell
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        if let pos = self.selectedCellIndexes.indexOf(indexPath.row) {
+            self.selectedCellIndexes.removeAtIndex(pos)
+            if let cell = self.myCollectionView.cellForItemAtIndexPath(indexPath) {
+                cell.layer.borderWidth = 5.0
+                cell.layer.borderColor = UIColor.blackColor().CGColor
+            }
+            if self.selectedCellIndexes.isEmpty {
+                newCollectionButton.setTitle(NEW_COLLECTION, forState: UIControlState.Normal)
+            }
+            else {
+               newCollectionButton.setTitle(REMOVE_SELECTED_PICTURES, forState: UIControlState.Normal)
+            }
+        }
+    }
+    
+    
+    /// delete cells and underlying photos and image files
+    /// :patam: indexes indexes of cells to delete
+    func deleteCells(indexes: [Int]) {
+        var photosToDelete : [Photo] = []
+        for index in indexes {
+            photosToDelete.append(self.pin.photos[index] as! Photo)
+        }
+        for photoToDelete in photosToDelete {
+            self.pin.photos.removeObject(photoToDelete)
+            CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photoToDelete)
+        }
         CoreDataStackManager.sharedInstance().saveContext()
         myCollectionView.reloadData()
     }

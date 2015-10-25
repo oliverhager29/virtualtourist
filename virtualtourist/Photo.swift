@@ -19,6 +19,7 @@ class Photo : NSManagedObject {
     @NSManaged var title : String
     @NSManaged var url : String
     @NSManaged var pin : Pin
+    @NSManaged var isDownloadCompleted : Bool
     
     /// initialize managed object
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -37,6 +38,7 @@ class Photo : NSManagedObject {
         self.title = title
         self.url = url
         self.pin = pin
+        self.isDownloadCompleted = false
     }
     
     /// delete file for image associated with Photo entity

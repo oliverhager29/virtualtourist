@@ -37,13 +37,26 @@ class LocationRepository {
                             print(error)
                         }
                     }
+                    pin.isDownloadCompleted = false
                     for photo in result {
+                        photo.isDownloadCompleted = false
                         FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
                             results, error in
+                            photo.isDownloadCompleted = true
                             if let error = error {
                                 print(error)
                             }
                             dispatch_async(dispatch_get_main_queue()) {
+                                var allDownloadsCompleted = true
+                                for tmpObj in pin.photos {
+                                    let tmpPhoto = tmpObj as! Photo
+                                    if !tmpPhoto.isDownloadCompleted {
+                                        allDownloadsCompleted = false
+                                    }
+                                }
+                                if allDownloadsCompleted {
+                                    pin.isDownloadCompleted = true
+                                }
                                 photo.pin = pin
                                 if self.sharedContext.deletedObjects.contains(pin) {
                                     FlickrClient.sharedInstance().deleteImage(photo.getUniqueKey())
