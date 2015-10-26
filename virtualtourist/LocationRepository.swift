@@ -29,7 +29,7 @@ class LocationRepository {
     /// load and create photos for given pin and associate them with the pin
     /// :param: pin pin for which photos are loaded
     static func loadPhotos(pin: Pin) {
-        LocationRepository.pinDownloadCompleted.removeValueForKey(pin.getUniqueKey())
+        LocationRepository.pinDownloadCompleted.updateValue(false, forKey: pin.getUniqueKey())
         do {
             try sharedContext.save()
             FlickrClient.sharedInstance().getPhotosByLocation(pin) {
@@ -51,7 +51,6 @@ class LocationRepository {
                         LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
                     }
                     else {
-                        LocationRepository.pinDownloadCompleted.updateValue(false, forKey: pin.getUniqueKey())
                         for photo in result {
                             photo.isDownloadCompleted = false
                             FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
@@ -174,6 +173,15 @@ class LocationRepository {
             mapRegion?.latitudeDelta = latitudeDelta
             mapRegion?.longitudeDelta = longitudeDelta
         }
+        CoreDataStackManager.sharedInstance().saveContext()
+    }
+    
+    /// delete photo from pin
+    /// :param: pin pin
+    /// :param: photoToDelete photo to delete
+    static func deletePhotoFromPin(pin: Pin, photoToDelete: Photo) {
+        pin.photos.removeObject(photoToDelete)
+        CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photoToDelete)
         CoreDataStackManager.sharedInstance().saveContext()
     }
 }

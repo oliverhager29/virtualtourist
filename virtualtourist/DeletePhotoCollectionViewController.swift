@@ -83,10 +83,10 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         let tmpPhotos = pin.photos.array as! [Photo]
         var photosToDelete : [Photo] = []
         photosToDelete.appendContentsOf(tmpPhotos)
-        pin.photos.removeAllObjects()
         for photo in photosToDelete {
             CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photo)
         }
+        pin.photos.removeAllObjects()
         CoreDataStackManager.sharedInstance().saveContext()
         LocationRepository.loadPhotos(pin)
         handleLoadResult()
@@ -300,17 +300,15 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     
     /// delete cells and underlying photos and image files
-    /// :patam: indexes indexes of cells to delete
+    /// :param: indexes indexes of cells to delete
     func deleteCells(indexes: [Int]) {
         var photosToDelete : [Photo] = []
         for index in indexes {
             photosToDelete.append(self.pin.photos[index] as! Photo)
         }
         for photoToDelete in photosToDelete {
-            self.pin.photos.removeObject(photoToDelete)
-            CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photoToDelete)
+            LocationRepository.deletePhotoFromPin(self.pin, photoToDelete: photoToDelete)
         }
-        CoreDataStackManager.sharedInstance().saveContext()
         myCollectionView.reloadData()
         newCollectionButton.setTitle(NEW_COLLECTION, forState: UIControlState.Normal)
     }

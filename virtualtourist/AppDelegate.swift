@@ -51,7 +51,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         if let region = region {
             LocationRepository.updateMapRegion(region.center.latitude, longitude: region.center.longitude, latitudeDelta: region.span.latitudeDelta, longitudeDelta: region.span.longitudeDelta)
         }
-        self.saveContext()
+        do {
+            try LocationRepository.sharedContext.save()
+        }
+        catch {
+            print(error)
+        }
     }
 
     // MARK: - Split view

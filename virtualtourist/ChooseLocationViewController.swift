@@ -13,18 +13,17 @@ import MapKit
 
 /// ChooseLocationViewController - map that allows user to select location
 class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
-    /// error alert when having no images are available for a location
-    var noImagesAlert: UIAlertController!
-    var errorRetrievingImagesAlert: UIAlertController!
-    
     /// navigation item to enhance for a second right button
     @IBOutlet weak var myNavigationItem: UINavigationItem!
   
+    /// map view
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    /// previous annotation
     var previousAnnotation : MapLocation?
     
     @IBAction func editButtonPressed(sender: UIButton) {
@@ -34,10 +33,6 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
     /// :param: animated true if animated, false otheriwse
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.noImagesAlert = UIAlertController(title: "Error", message: "No images available", preferredStyle: UIAlertControllerStyle.Alert)
-        self.noImagesAlert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-        self.errorRetrievingImagesAlert = UIAlertController(title: "Error", message: "Failed to retrieve images", preferredStyle: UIAlertControllerStyle.Alert)
-        self.errorRetrievingImagesAlert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: "addAnnotation:")
         longPressGesture.minimumPressDuration = 1.0
         mapView.delegate = self
