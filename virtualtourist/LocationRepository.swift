@@ -10,12 +10,12 @@ import CoreData
 
 /// enacapsulated persistence operations on locations
 class LocationRepository {
+    /// shared managed object context
     static var sharedContext: NSManagedObjectContext {
         return CoreDataStackManager.sharedInstance().managedObjectContext
     }
-    /// for comparison of coordinates
-    static let DELTA : Double = 0.000001
     
+    /// keeps track of whether all photos for a pin have been downloaded
     static var pinDownloadCompleted = Dictionary<String, Bool>()
     
     /// add location
@@ -23,11 +23,18 @@ class LocationRepository {
     /// :param: longitude longitude
     static func add(latitude: Double, longitude: Double) {
         let pin = Pin(insertIntoManagedObjectContext: sharedContext, latitude: latitude, longitude: longitude, photos: [])
+        loadPhotos(pin)
+    }
+
+    /// load and create photos for given pin and associate them with the pin
+    /// :param: pin pin for which photos are loaded
+    static func loadPhotos(pin: Pin) {
         LocationRepository.pinDownloadCompleted.removeValueForKey(pin.getUniqueKey())
         do {
             try sharedContext.save()
             FlickrClient.sharedInstance().getPhotosByLocation(pin) {
-                result, error in                if let error = error as NSError? {
+                result, error in
+                if let error = error as NSError? {
                     print(error)
                 }
                 else if let result = result as [Photo]? {
@@ -41,11 +48,9 @@ class LocationRepository {
                         }
                     }
                     if result.isEmpty {
-                        //pin.isDownloadCompleted = true
                         LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
                     }
                     else {
-                        //pin.isDownloadCompleted = false
                         LocationRepository.pinDownloadCompleted.updateValue(false, forKey: pin.getUniqueKey())
                         for photo in result {
                             photo.isDownloadCompleted = false
@@ -63,11 +68,12 @@ class LocationRepository {
                                             allDownloadsCompleted = false
                                         }
                                     }
+                                    // if all photos for a pin have been downloaded then mark the pin as download completed
                                     if allDownloadsCompleted {
-                                        //pin.isDownloadCompleted = true
                                         LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
                                     }
                                     photo.pin = pin
+                                    // in case a photo has been deleted in the meantime then also delete the image
                                     if self.sharedContext.deletedObjects.contains(pin) {
                                         FlickrClient.sharedInstance().deleteImage(photo.getUniqueKey())
                                     }
@@ -79,7 +85,7 @@ class LocationRepository {
             }
         }
         catch {
-            print("Saving a newly created pin failed")
+            print("Loading photos failed")
         }
     }
     
@@ -109,10 +115,12 @@ class LocationRepository {
     /// :returns: found locations
     static func find(latitude: Double, longitude: Double) -> [Pin] {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
-        //fetchRequest.predicate = NSPredicate(format: "abs(latitude - %@) <= %@ and abs(longitude - %@) <= %@", NSNumber(double:latitude), NSNumber(double:DELTA), NSNumber(double:longitude), NSNumber(double:DELTA));
         fetchRequest.predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", NSNumber(double:latitude), NSNumber(double:longitude))
         do {
             let results = try sharedContext.executeFetchRequest(fetchRequest)
+            for pin in results {
+                LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
+            }
             return results as! [Pin]
         }
         catch {

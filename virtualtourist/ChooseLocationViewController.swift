@@ -139,6 +139,7 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
             let pins = LocationRepository.find(mapLocation.coordinate.latitude, longitude: mapLocation.coordinate.longitude)
             if !pins.isEmpty {
                 controller.pin = pins[0]
+                
                 self.navigationController!.pushViewController(controller, animated: true)
             }
         }

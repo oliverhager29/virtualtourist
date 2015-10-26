@@ -61,8 +61,9 @@ extension FlickrClient {
                         let jsonParams : [String : AnyObject] = [FlickrClient.JSONResponseKeys.Id: id, FlickrClient.JSONResponseKeys.Secret: secret, FlickrClient.JSONResponseKeys.ServerId: server, FlickrClient.JSONResponseKeys.FarmId: farm]
                         
                         let urlFilled = self.fillUrl(FlickrClient.Constants.ImageBaseURL, parameters: jsonParams)
-                            let photo = Photo(insertIntoManagedObjectContext: CoreDataStackManager.sharedInstance().managedObjectContext, id: id, owner: owner, secret: secret, server: server, farm: farm, title: title, url: urlFilled, pin: pin)
-                        photos.append(photo)
+                        let photo = Photo(insertIntoManagedObjectContext: CoreDataStackManager.sharedInstance().managedObjectContext, id: id, owner: owner, secret: secret, server: server, farm: farm, title: title, url: urlFilled, pin: pin)
+                        CoreDataStackManager.sharedInstance().saveContext()
+                            photos.append(photo)
                     }
                     completionHandler(result: photos, error: nil)
                 }

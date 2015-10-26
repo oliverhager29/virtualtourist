@@ -60,7 +60,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
             deleteCells(self.selectedCellIndexes)
             self.selectedCellIndexes.removeAll()
         }
-        reloadPhotos()
+        reloadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, newCollectionButton: newCollectionButton)
     }
     
     /// initialize the alerts and their handlers
@@ -73,13 +73,42 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         mapView.delegate = self
         myCollectionView.delegate = self
         addAnnotation(mapLocation)
+        handleLoadResult()
+    }
+    
+    /// load photos for a given Pin into the collection view
+    /// :param: pin Pin
+    /// :param: viewController view controller that contains map and collection view
+    /// :param: collectionView collection view
+    /// :param: errorRetrievingImagesAlert alert that image retrieval failed
+    /// :param: noImagesAlert alert that no images are available for Pin
+    /// :param: newCollectionButton new collection button
+    func reloadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
+        newCollectionButton.enabled = false
+        let tmpPhotos = pin.photos.array as! [Photo]
+        var photosToDelete : [Photo] = []
+        photosToDelete.appendContentsOf(tmpPhotos)
+        pin.photos.removeAllObjects()
+        for photo in photosToDelete {
+            CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photo)
+        }
+        CoreDataStackManager.sharedInstance().saveContext()
+        LocationRepository.loadPhotos(pin)
+        handleLoadResult()
+    }
+    
+    /// handle load result by enabling/disabling the new collection button and displaying the No images label
+    func handleLoadResult() {
         selectedCellIndexes = []
         newCollectionButton.setTitle(NEW_COLLECTION, forState: UIControlState.Normal)
         newCollectionButton.enabled = LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) && !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]!
+        while !LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) {
+            
+        }
         let qualityOfServiceClass = QOS_CLASS_BACKGROUND
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
         //if !pin.isDownloadCompleted {
-        if LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) && !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]! {
+        if !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]! {
             dispatch_async(dispatch_get_main_queue(), {
                 self.myCollectionView.allowsSelection = false
                 self.myCollectionView.allowsMultipleSelection = false
@@ -127,68 +156,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         }
     }
     
-    /// load photos for a given Pin into the collection view
-    /// :param: pin Pin
-    /// :param: viewController view controller that contains map and collection view
-    /// :param: collectionView collection view
-    /// :param: errorRetrievingImagesAlert alert that image retrieval failed
-    /// :param: noImagesAlert alert that no images are available for Pin
-    /// :param: newCollectionButton new collection button
-    func loadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
-        FlickrClient.sharedInstance().getPhotosByLocation(pin) {
-            result, error in
-            if let error = error {
-                print(error)
-                dispatch_async(dispatch_get_main_queue(), {
-                    viewController.presentViewController(errorRetrievingImagesAlert, animated: true, completion: nil)
-                })
-            }
-            else {
-                newCollectionButton.enabled = false
-                if result!.isEmpty {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        newCollectionButton.enabled = true
-                        self.myCollectionView.hidden = true
-                        self.noImagesLabel.hidden = false
-                    })
-                }
-                else {
-                    pin.photos.addObjectsFromArray(result!)
-                    CoreDataStackManager.sharedInstance().saveContext()
-                    for obj in pin.photos {
-                        let photo = obj as! Photo
-                        photo.isDownloadCompleted = false
-                        FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
-                            result, error in
-                            photo.isDownloadCompleted = true
-                            if let error = error {
-                                print(error)
-                                dispatch_async(dispatch_get_main_queue(), {
-                                    viewController.presentViewController(errorRetrievingImagesAlert, animated: true, completion: nil)
-                                })
-                            }
-                            else if result != nil {
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    var allDownloadsCompleted = true
-                                    for tmpObj in pin.photos {
-                                        let tmpPhoto = tmpObj as! Photo
-                                        if !tmpPhoto.isDownloadCompleted {
-                                            allDownloadsCompleted = false
-                                        }
-                                    }
-                                    if allDownloadsCompleted && collectionView != nil {
-                                        newCollectionButton.enabled = true
-                                        collectionView.reloadData()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     /// get cell border sizes
     /// get ceollection view cell size
     /// :param: collectionView collection view
@@ -208,28 +175,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         let screenSize = UIScreen.mainScreen().bounds
         let cellSize = (screenSize.size.width / 3.0) - (2.0 * 5.0)
         return CGSize(width: cellSize, height: cellSize)
-    }
-    
-    /// reload photos
-    func reloadPhotos() {
-        newCollectionButton.enabled = false
-        let tmpPhotos = pin.photos.array as! [Photo]
-        var photosToDelete : [Photo] = []
-        photosToDelete.appendContentsOf(tmpPhotos)
-        pin.photos.removeAllObjects()
-        for photo in photosToDelete {
-            CoreDataStackManager.sharedInstance().managedObjectContext.deleteObject(photo)
-        }
-        CoreDataStackManager.sharedInstance().saveContext()
-        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, newCollectionButton: newCollectionButton)
-        myCollectionView.reloadData()
-    }
-    
-    /// load photos
-    func loadPhotos() {
-        newCollectionButton.enabled = false
-        loadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, newCollectionButton: newCollectionButton)
-        myCollectionView.reloadData()
     }
 
     /// add annotations to map
