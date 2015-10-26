@@ -118,9 +118,6 @@ class LocationRepository {
         fetchRequest.predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", NSNumber(double:latitude), NSNumber(double:longitude))
         do {
             let results = try sharedContext.executeFetchRequest(fetchRequest)
-            for pin in results {
-                LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
-            }
             return results as! [Pin]
         }
         catch {

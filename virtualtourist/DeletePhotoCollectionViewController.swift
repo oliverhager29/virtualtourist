@@ -30,9 +30,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// new collection button
     @IBOutlet weak var newCollectionButton: UIButton!
     
-    /// alert for failed image retrieval
-    var errorRetrievingImagesAlert: UIAlertController!
-    
     /// map location
     var mapLocation: MapLocation!
     
@@ -60,14 +57,14 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
             deleteCells(self.selectedCellIndexes)
             self.selectedCellIndexes.removeAll()
         }
-        reloadPhotos(pin, viewController: self, collectionView: myCollectionView, errorRetrievingImagesAlert: errorRetrievingImagesAlert, newCollectionButton: newCollectionButton)
+        else {
+            reloadPhotos(pin, viewController: self, collectionView: myCollectionView, newCollectionButton: newCollectionButton)
+        }
     }
     
     /// initialize the alerts and their handlers
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.errorRetrievingImagesAlert = UIAlertController(title: "Error", message: "Failed to retrieve images", preferredStyle: UIAlertControllerStyle.Alert)
-        self.errorRetrievingImagesAlert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         myCollectionView.allowsSelection = true
         myCollectionView.allowsMultipleSelection = true
         mapView.delegate = self
@@ -80,10 +77,8 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     /// :param: pin Pin
     /// :param: viewController view controller that contains map and collection view
     /// :param: collectionView collection view
-    /// :param: errorRetrievingImagesAlert alert that image retrieval failed
-    /// :param: noImagesAlert alert that no images are available for Pin
     /// :param: newCollectionButton new collection button
-    func reloadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, errorRetrievingImagesAlert: UIAlertController, newCollectionButton: UIButton!) {
+    func reloadPhotos(pin: Pin, viewController: UIViewController, collectionView: UICollectionView!, newCollectionButton: UIButton!) {
         newCollectionButton.enabled = false
         let tmpPhotos = pin.photos.array as! [Photo]
         var photosToDelete : [Photo] = []
@@ -142,7 +137,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         else {
             self.newCollectionButton.enabled = true
             if self.pin.photos.count == 0 {
-                //self.presentViewController(self.noImagesAlert, animated: true, completion: nil)
                 self.myCollectionView.hidden = true
                 self.noImagesLabel.hidden = false
             }
@@ -186,11 +180,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         let coordinateRect = MKMapRectMake(coordinate.x, coordinate.y, 10000.0, 10000.0);
         mapView.setVisibleMapRect(coordinateRect, animated: true)
         mapView.setCenterCoordinate(location.coordinate, animated: true)
-    }
-    
-    /// reload the other students locations (refresh button is pressed)
-    func reloadLocations() {
-
     }
     
     override func didReceiveMemoryWarning() {
@@ -323,5 +312,6 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
         }
         CoreDataStackManager.sharedInstance().saveContext()
         myCollectionView.reloadData()
+        newCollectionButton.setTitle(NEW_COLLECTION, forState: UIControlState.Normal)
     }
 }

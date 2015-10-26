@@ -48,7 +48,11 @@ class ChooseLocationViewController: UIViewController, MKMapViewDelegate {
             mapView.region = region
         }
         mapView.removeAnnotations(mapView.annotations)
-        addAnnotations(mapView, locations: LocationRepository.findAll())
+        let locations = LocationRepository.findAll()
+        for pin in locations {
+            LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
+        }
+        addAnnotations(mapView, locations: locations)
     }
     
     /// remember center and span of map view
