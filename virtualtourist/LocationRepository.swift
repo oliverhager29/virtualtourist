@@ -29,7 +29,11 @@ class LocationRepository {
     /// load and create photos for given pin and associate them with the pin
     /// :param: pin pin for which photos are loaded
     static func loadPhotos(pin: Pin) {
-        LocationRepository.pinDownloadCompleted.updateValue(false, forKey: pin.getUniqueKey())
+        var pinUniqueKey : String!
+        CoreDataStackManager.sharedInstance().managedObjectContext.performBlockAndWait() {
+            pinUniqueKey = pin.getUniqueKey()
+        }
+        LocationRepository.pinDownloadCompleted.updateValue(false, forKey: pinUniqueKey)
         do {
             try sharedContext.save()
             FlickrClient.sharedInstance().getPhotosByLocation(pin) {
@@ -48,14 +52,17 @@ class LocationRepository {
                         }
                     }
                     if result.isEmpty {
-                        LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
+                        LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pinUniqueKey)
                     }
                     else {
                         for photo in result {
-                            photo.isDownloadCompleted = false
+                            dispatch_async(dispatch_get_main_queue()) {
+                                photo.isDownloadCompleted = false
                             FlickrClient.sharedInstance().getImageByUrl(photo.getUniqueKey()) {
                                 results, error in
-                                photo.isDownloadCompleted = true
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    photo.isDownloadCompleted = true
+                                }
                                 if let error = error {
                                     print(error)
                                 }
@@ -69,7 +76,7 @@ class LocationRepository {
                                     }
                                     // if all photos for a pin have been downloaded then mark the pin as download completed
                                     if allDownloadsCompleted {
-                                        LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pin.getUniqueKey())
+                                        LocationRepository.pinDownloadCompleted.updateValue(true, forKey: pinUniqueKey)
                                     }
                                     photo.pin = pin
                                     // in case a photo has been deleted in the meantime then also delete the image
@@ -77,6 +84,7 @@ class LocationRepository {
                                         FlickrClient.sharedInstance().deleteImage(photo.getUniqueKey())
                                     }
                                 }
+                            }
                             }
                         }
                     }

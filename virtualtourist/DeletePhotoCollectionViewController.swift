@@ -94,16 +94,20 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
     
     /// handle load result by enabling/disabling the new collection button and displaying the No images label
     func handleLoadResult() {
+        var pinUniqueKey : String!
+        CoreDataStackManager.sharedInstance().managedObjectContext.performBlockAndWait() {
+            pinUniqueKey = self.pin.getUniqueKey()
+        }
         selectedCellIndexes = []
         newCollectionButton.setTitle(NEW_COLLECTION, forState: UIControlState.Normal)
-        newCollectionButton.enabled = LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) && !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]!
-        while !LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) {
+        newCollectionButton.enabled = LocationRepository.pinDownloadCompleted.keys.contains(pin.getUniqueKey()) && !LocationRepository.pinDownloadCompleted[pinUniqueKey]!
+        while !LocationRepository.pinDownloadCompleted.keys.contains(pinUniqueKey) {
             
         }
         let qualityOfServiceClass = QOS_CLASS_BACKGROUND
         let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
         //if !pin.isDownloadCompleted {
-        if !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]! {
+        if !LocationRepository.pinDownloadCompleted[pinUniqueKey]! {
             dispatch_async(dispatch_get_main_queue(), {
                 self.myCollectionView.allowsSelection = false
                 self.myCollectionView.allowsMultipleSelection = false
@@ -111,7 +115,7 @@ class DeletePhototCollectionViewController: UIViewController, MKMapViewDelegate,
             })
             dispatch_async(backgroundQueue, {
                 //while !self.pin.isDownloadCompleted {
-                while !LocationRepository.pinDownloadCompleted[self.pin.getUniqueKey()]! {
+                while !LocationRepository.pinDownloadCompleted[pinUniqueKey]! {
                     NSThread.sleepForTimeInterval(1)
                     dispatch_async(dispatch_get_main_queue(), {
                         self.myCollectionView.reloadData()
